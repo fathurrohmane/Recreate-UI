@@ -118,38 +118,28 @@ fun DraggableFloatingButton(
                 .pointerInput(Unit) {
                     detectDragGestures(
                         onDragEnd = {
-                            if (translationX.value < 0f) {
-                                coroutineScope.launch {
+                            coroutineScope.launch {
+                                if (translationX.value < 0f) {
                                     translationX.animateTo(0f)
-                                }
-                            } else if (translationX.value > endXPosition) {
-                                coroutineScope.launch {
+                                } else if (translationX.value > endXPosition) {
                                     translationX.animateTo(endXPosition.toFloat())
                                 }
-                            }
-
-                            if (translationY.value < 0f) {
-                                coroutineScope.launch {
+                                if (translationY.value < 0f) {
                                     translationY.animateTo(0f)
-                                }
-                            } else if (translationY.value > endYPosition) {
-                                coroutineScope.launch {
+                                } else if (translationY.value > endYPosition) {
                                     translationY.animateTo(endYPosition.toFloat())
                                 }
-                            }
+                                if (translationX.value > 0 || translationX.value < endXPosition) {
+                                    val newOffset =
+                                        if (translationX.value + contentSize.width / 2 > boxSize.width / 2) {
+                                            endXPosition.toFloat()
+                                        } else {
+                                            0f
+                                        }
 
-                            if (translationX.value > 0 || translationX.value < endXPosition) {
-                                val newOffset =
-                                    if (translationX.value + contentSize.width / 2 > boxSize.width / 2) {
-                                        endXPosition.toFloat()
-                                    } else {
-                                        0f
-                                    }
-                                coroutineScope.launch {
                                     translationX.animateTo(newOffset)
                                 }
                             }
-
                         }
                     ) { change, dragAmount ->
                         change.consume()
